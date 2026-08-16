@@ -1,16 +1,16 @@
 # ci-templates
 
-Référentiel de templates de workflows GitHub Actions réutilisables.
+Repository of reusable GitHub Actions workflow templates.
 
-## Workflows disponibles
+## Available workflows
 
-### Trivy — analyse de sécurité
+### Trivy — security scan
 
-Le workflow [`trivy.yml`](.github/workflows/trivy.yml) utilise [Trivy](https://github.com/aquasecurity/trivy) pour scanner les vulnérabilités de sécurité (`CRITICAL`, `HIGH`) dans le code source du dépôt. Il publie les résultats dans l'onglet **Security** de GitHub via le format SARIF.
+The [`trivy.yml`](.github/workflows/trivy.yml) workflow uses [Trivy](https://github.com/aquasecurity/trivy) to scan for security vulnerabilities (`CRITICAL`, `HIGH`) in the repository source code. Results are published to the GitHub **Security** tab via SARIF format.
 
-#### Utilisation
+#### Usage
 
-Créez un fichier `.github/workflows/security.yml` dans votre dépôt :
+Create a `.github/workflows/security.yml` file in your repository:
 
 ```yaml
 name: Security Scan
@@ -21,7 +21,7 @@ on:
   pull_request:
     branches: [main]
   schedule:
-    - cron: "0 6 * * 1" # Tous les lundis à 06h00
+    - cron: "0 6 * * 1" # Every Monday at 06:00
 
 jobs:
   trivy:
