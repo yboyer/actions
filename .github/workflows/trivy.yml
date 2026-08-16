@@ -2,42 +2,6 @@ name: Trivy Security Scan
 
 on:
   workflow_call:
-    inputs:
-      image-ref:
-        description: "Docker image reference to scan (e.g. myimage:latest). Leave empty to scan the repository filesystem."
-        required: false
-        type: string
-        default: ""
-      scan-type:
-        description: "Type of scan: 'fs' for filesystem, 'image' for container image"
-        required: false
-        type: string
-        default: "fs"
-      severity:
-        description: "Comma-separated list of severities to report (e.g. CRITICAL,HIGH)"
-        required: false
-        type: string
-        default: "CRITICAL,HIGH"
-      exit-code:
-        description: "Exit code when vulnerabilities are found (0 = don't fail, 1 = fail)"
-        required: false
-        type: number
-        default: 1
-      format:
-        description: "Output format: table, json, sarif"
-        required: false
-        type: string
-        default: "sarif"
-      output:
-        description: "File to write the results to (used with sarif format)"
-        required: false
-        type: string
-        default: "trivy-results.sarif"
-      upload-sarif:
-        description: "Upload SARIF results to GitHub Security tab"
-        required: false
-        type: boolean
-        default: true
 
 jobs:
   trivy:
@@ -51,30 +15,18 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Run Trivy (filesystem)
-        if: inputs.scan-type == 'fs'
+      - name: Run Trivy
         uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: fs
           scan-ref: "."
-          severity: ${{ inputs.severity }}
-          exit-code: ${{ inputs.exit-code }}
-          format: ${{ inputs.format }}
-          output: ${{ inputs.output }}
-
-      - name: Run Trivy (image)
-        if: inputs.scan-type == 'image'
-        uses: aquasecurity/trivy-action@0.28.0
-        with:
-          scan-type: image
-          image-ref: ${{ inputs.image-ref }}
-          severity: ${{ inputs.severity }}
-          exit-code: ${{ inputs.exit-code }}
-          format: ${{ inputs.format }}
-          output: ${{ inputs.output }}
+          severity: CRITICAL,HIGH
+          exit-code: 1
+          format: sarif
+          output: trivy-results.sarif
 
       - name: Upload SARIF results to GitHub Security tab
-        if: (success() || failure()) && inputs.upload-sarif && inputs.format == 'sarif'
+        if: success() || failure()
         uses: github/codeql-action/upload-sarif@v3
         with:
-          sarif_file: ${{ inputs.output }}
+          sarif_file: trivy-results.sarif
