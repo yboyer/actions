@@ -16,6 +16,7 @@ Create a `.github/workflows/security.yml` file in your repository:
 name: Security Scan
 
 on:
+  workflow_dispatch
   push:
     branches: [main]
   pull_request:
