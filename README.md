@@ -23,6 +23,10 @@ on:
   schedule:
     - cron: "0 6 * * 1" # Every Monday at 06:00
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   trivy:
     uses: yboyer/ci-templates/.github/workflows/trivy.yml@main
