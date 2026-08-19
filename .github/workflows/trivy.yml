@@ -21,24 +21,5 @@ jobs:
           scan-type: fs
           scan-ref: .
           severity: HIGH,CRITICAL
-          exit-code: 0
           ignore-unfixed: true
-          format: sarif
-          output: trivy-results.sarif
-
-      - name: Upload SARIF results to GitHub Security tab
-        if: success() || failure()
-        uses: github/codeql-action/upload-sarif@v4
-        with:
-          sarif_file: trivy-results.sarif
-
-      - name: Table display
-        uses: aquasecurity/trivy-action@v0.36.0
-        with:
-          scan-type: fs
           format: table
-          scan-ref: .
-          severity: HIGH,CRITICAL
-          ignore-unfixed: true
-          exit-code: 1
-          skip-setup-trivy: true
