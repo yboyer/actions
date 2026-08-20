@@ -6,7 +6,7 @@ Repository of reusable GitHub Actions workflow templates.
 
 ### Trivy — security scan
 
-The [`trivy.yml`](.github/workflows/trivy.yml) workflow uses [Trivy](https://github.com/aquasecurity/trivy) to scan for security vulnerabilities in the repository source code. Results are published to the GitHub **Security** tab via SARIF format.
+The [`trivy.yml`](.github/workflows/trivy.yml) workflow uses [Trivy](https://github.com/aquasecurity/trivy) to scan for security vulnerabilities in the repository source code.
 
 #### Usage
 
@@ -23,10 +23,6 @@ on:
     branches: [main]
   schedule:
     - cron: "0 6 * * 1"
-
-permissions:
-  contents: read
-  security-events: write
 
 jobs:
   trivy:
