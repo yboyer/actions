@@ -38,16 +38,15 @@ The [`docker-publish`](docker-publish/action.yml) composite action builds, tags,
 
 #### Usage
 
-The calling workflow needs `contents: read` to check out its source and `packages: write` to publish to GHCR. Check out its source before invoking the remote action:
+The job grants `contents: read` so `actions/checkout` can fetch the source, and `packages: write` so `GITHUB_TOKEN` can publish the image to GHCR.
 
 ```yaml
-permissions:
-  contents: read
-  packages: write
-
 jobs:
   publish:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: yboyer/ci-templates/docker-publish@master
