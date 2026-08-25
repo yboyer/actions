@@ -1,0 +1,17 @@
+name: Trivy security scan
+description: Scan the repository filesystem for HIGH and CRITICAL security vulnerabilities.
+
+runs:
+  using: composite
+  steps:
+    - name: Trivy scan
+      uses: aquasecurity/trivy-action@v0.36.0
+      with:
+        scan-type: fs
+        scan-ref: .
+        scanners: vuln,secret,misconfig
+        severity: HIGH,CRITICAL
+        ignore-unfixed: true
+        format: table
+        exit-code: 1
+        version: latest
