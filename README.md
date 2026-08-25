@@ -10,7 +10,7 @@ The [`trivy`](trivy/action.yml) composite action uses [Trivy](https://github.com
 
 #### Usage
 
-Create a `.github/workflows/security.yml` file in your repository. Check out its source before invoking the remote action:
+Create a `.github/workflows/security.yml` file in your repository. The example supports both `master` and `main`; remove either branch if your repository uses only one. Check out its source before invoking the remote action:
 
 ```yaml
 name: Security Scan
@@ -18,9 +18,9 @@ name: Security Scan
 on:
   workflow_dispatch:
   push:
-    branches: [main]
+    branches: [master, main]
   pull_request:
-    branches: [main]
+    branches: [master, main]
   schedule:
     - cron: "0 6 * * 1"
 
@@ -51,10 +51,10 @@ jobs:
       - uses: actions/checkout@v7.0.1
       - uses: yboyer/ci-templates/docker-publish@master
         with:
-          image: ghcr.io/yboyer/asphalia/api
+          image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
           secrets: |
-            sentry_auth_token=${{ secrets.SENTRY_AUTH_TOKEN }}
+            token=${{ secrets.TOKEN }}
 ```
 
-The `secrets` input uses the same `id=value` format as [`docker/build-push-action`](https://github.com/docker/build-push-action). The Dockerfile can consume the above secret with `RUN --mount=type=secret,id=sentry_auth_token ...`.
+The `secrets` input uses the same `id=value` format as [`docker/build-push-action`](https://github.com/docker/build-push-action). The Dockerfile can consume the above secret with `RUN --mount=type=secret,id=token ...`.
