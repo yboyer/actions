@@ -1,4 +1,4 @@
-name: Trivy Security Scan
+name: Security Scan
 
 on:
   workflow_dispatch:
@@ -16,3 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v7.0.1
       - uses: ./trivy
+
+  gitleaks:
+    name: Gitleaks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          fetch-depth: 0
+      - uses: ./gitleaks
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

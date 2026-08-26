@@ -1,0 +1,8 @@
+name: Gitleaks secret scan
+description: Scan the repository history for leaked secrets.
+
+runs:
+  using: composite
+  steps:
+    - name: Gitleaks scan
+      uses: gitleaks/gitleaks-action@v3
