@@ -6,7 +6,7 @@ Repository of reusable GitHub Actions templates.
 
 ### Trivy — security scan
 
-The [`trivy`](trivy/action.yml) composite action uses [Trivy](https://github.com/aquasecurity/trivy) to scan the checked-out repository source code for security vulnerabilities.
+The [`trivy-scan`](trivy-scan/action.yml) composite action uses [Trivy](https://github.com/aquasecurity/trivy) to scan the checked-out repository source code for security vulnerabilities.
 
 #### Usage
 
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: yboyer/ci-templates/trivy@master
+      - uses: yboyer/ci-templates/trivy-scan@master
 ```
 
 ### Gitleaks — secret scan
