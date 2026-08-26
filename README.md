@@ -1,6 +1,6 @@
-# ci-templates
+# actions
 
-Repository of reusable GitHub Actions templates.
+Repository of reusable GitHub Actions.
 
 ## Available templates
 
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: yboyer/ci-templates/trivy-scan@master
+      - uses: yboyer/actions/trivy-scan@master
 ```
 
 ### Gitleaks — secret scan
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/ci-templates/gitleaks@master
+      - uses: yboyer/actions/gitleaks@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -77,7 +77,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: yboyer/ci-templates/docker-publish@master
+      - uses: yboyer/actions/docker-publish@master
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
