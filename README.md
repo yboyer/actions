@@ -44,7 +44,9 @@ name: Secrets Scan
 on:
   workflow_dispatch:
   push:
+    branches: [master, main]
   pull_request:
+    branches: [master, main]
 
 jobs:
   trivy:
