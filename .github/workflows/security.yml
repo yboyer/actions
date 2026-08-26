@@ -18,7 +18,7 @@ jobs:
       - uses: ./trivy
 
   gitleaks:
-    name: gitleaks
+    name: Gitleaks
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1

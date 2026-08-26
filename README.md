@@ -49,7 +49,7 @@ on:
     branches: [master, main]
 
 jobs:
-  trivy:
+  gitleaks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
