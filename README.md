@@ -54,6 +54,8 @@ jobs:
         with:
           fetch-depth: 0
       - uses: yboyer/ci-templates/gitleaks@master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Docker publish
