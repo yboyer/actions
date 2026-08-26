@@ -79,7 +79,7 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
+      - uses: docker/login-action@v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
