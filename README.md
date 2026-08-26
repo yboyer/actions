@@ -68,6 +68,8 @@ The [`docker-publish`](docker-publish/action.yml) composite action builds, tags,
 
 The job grants `contents: read` so `actions/checkout` can fetch the source, and `packages: write` so `GITHUB_TOKEN` can publish the image to GHCR.
 
+For GHCR uploads, add the optional authentication step before `docker-publish`, as shown below.
+
 ```yaml
 jobs:
   publish:
@@ -77,6 +79,11 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v7.0.1
+      - uses: docker/login-action@v4.6.0
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       - uses: yboyer/actions/docker-publish@master
         with:
           image: ghcr.io/yboyer/example/api
