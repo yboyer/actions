@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: ./trivy
+      - uses: ./trivy-scan
 
   gitleaks:
     name: Gitleaks
