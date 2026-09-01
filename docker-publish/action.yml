@@ -11,6 +11,9 @@ inputs:
   secrets:
     description: BuildKit secrets, one id=value entry per line.
     required: false
+  build-args:
+    description: Docker build arguments, one key=value entry per line.
+    required: false
 
 runs:
   using: composite
@@ -41,3 +44,4 @@ runs:
         push: true
         tags: ${{ steps.meta.outputs.tags }}
         secrets: ${{ inputs.secrets }}
+        build-args: ${{ inputs.build-args }}
