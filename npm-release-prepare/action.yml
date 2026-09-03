@@ -1,0 +1,88 @@
+name: Prepare npm release
+description: Increment an npm package version and create its release pull request.
+
+inputs:
+  release-type:
+    description: "npm version increment: major, minor, patch, premajor, preminor, prepatch, or prerelease."
+    required: false
+    default: patch
+
+outputs:
+  version:
+    description: New package version.
+    value: ${{ steps.metadata.outputs.version }}
+  branch:
+    description: Created release branch.
+    value: ${{ steps.metadata.outputs.branch }}
+  pull-request-url:
+    description: URL of the created release pull request.
+    value: ${{ steps.pull-request.outputs.url }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate GitHub token
+      shell: bash
+      run: |
+        if [[ -z "${GH_TOKEN:-}" ]]; then
+          echo "GH_TOKEN must be provided to create the release pull request" >&2
+          exit 1
+        fi
+
+    - name: Validate release type
+      shell: bash
+      run: |
+        case "${{ inputs.release-type }}" in
+          major|minor|patch|premajor|preminor|prepatch|prerelease) ;;
+          *) echo "release-type must be a valid npm version increment" >&2; exit 1 ;;
+        esac
+
+    - name: Set up Node.js
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+
+    - name: Increment version
+      shell: bash
+      run: npm version "${{ inputs.release-type }}" --no-git-tag-version --ignore-scripts
+
+    - id: metadata
+      name: Get release metadata
+      shell: bash
+      run: |
+        VERSION="$(jq -r '.version' package.json)"
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "branch=release/v${VERSION}" >> "$GITHUB_OUTPUT"
+
+    - id: pull-request
+      name: Create release pull request
+      shell: bash
+      run: |
+        VERSION="${{ steps.metadata.outputs.version }}"
+        BRANCH="${{ steps.metadata.outputs.branch }}"
+        BODY_FILE="$(mktemp)"
+        LAST_TAG="$(git describe --tags --abbrev=0 2>/dev/null || true)"
+
+        if [[ -n "$LAST_TAG" ]]; then
+          COMMITS="$(git log "$LAST_TAG"..HEAD --pretty=format:'- %s (%h)')"
+          RANGE="since $LAST_TAG"
+        else
+          COMMITS="$(git log --pretty=format:'- %s (%h)')"
+          RANGE="since the first commit"
+        fi
+
+        {
+          printf 'Prepare release v%s.\n\n' "$VERSION"
+          printf '## Commits %s\n\n' "$RANGE"
+          printf '%s\n' "${COMMITS:-No commits found.}"
+        } > "$BODY_FILE"
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git checkout -b "$BRANCH"
+        git add package.json package-lock.json
+        git commit -m "chore(release): v${VERSION}"
+        git push origin "$BRANCH"
+        URL="$(gh pr create \
+          --head "$BRANCH" \
+          --title "chore(release): v${VERSION}" \
+          --body-file "$BODY_FILE")"
+        echo "url=$URL" >> "$GITHUB_OUTPUT"
