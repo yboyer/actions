@@ -128,10 +128,9 @@ jobs:
       - uses: yboyer/actions/npm-bump-version@v1.0.0
         with:
           release-type: ${{ inputs.release_type }}
-          branch: main
 ```
 
-The action requires `contents: write`. Use a full checkout and set `branch` to the repository's primary branch if it is not `main`.
+The action requires `contents: write`. Check out the repository's primary branch with full history before invoking it.
 
 Use `prepare` from `workflow_dispatch`, then `publish` when the version-bump pull request updates `package.json` and `package-lock.json` on the default branch.
 

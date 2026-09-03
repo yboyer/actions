@@ -6,11 +6,6 @@ inputs:
     description: "npm version increment: major, minor, patch, premajor, preminor, prepatch, or prerelease."
     required: false
     default: patch
-  branch:
-    description: Branch that receives the version-bump commit.
-    required: false
-    default: main
-
 outputs:
   version:
     description: New package version.
@@ -31,16 +26,6 @@ runs:
           major|minor|patch|premajor|preminor|prepatch|prerelease) ;;
           *) echo "release-type must be a valid npm version increment" >&2; exit 1 ;;
         esac
-
-    - name: Validate branch
-      shell: bash
-      env:
-        BRANCH: ${{ inputs.branch }}
-      run: |
-        if [[ "${GITHUB_REF_NAME:-}" != "$BRANCH" ]]; then
-          echo "npm-bump-version must run from the $BRANCH branch" >&2
-          exit 1
-        fi
 
     - name: Set up Node.js
       uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
@@ -64,7 +49,6 @@ runs:
       env:
         VERSION: ${{ steps.metadata.outputs.version }}
         TAG: ${{ steps.metadata.outputs.tag }}
-        BRANCH: ${{ inputs.branch }}
       run: |
         if git ls-remote --exit-code --tags origin "refs/tags/$TAG"; then
           echo "Tag $TAG already exists" >&2
@@ -79,5 +63,5 @@ runs:
         fi
         git commit -m "chore(release): v${VERSION}"
         git tag -a "$TAG" -m "Release $TAG"
-        git push origin "HEAD:$BRANCH"
+        git push origin HEAD
         git push origin "$TAG"
