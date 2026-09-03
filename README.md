@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7.0.1
-      - uses: yboyer/actions/trivy-scan@master
+      - uses: yboyer/actions/trivy-scan@v1.0.0
 ```
 
 ### Gitleaks — secret scan
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@master
+      - uses: yboyer/actions/gitleaks@v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -84,7 +84,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@master
+      - uses: yboyer/actions/docker-publish@v1.0.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -127,7 +127,7 @@ jobs:
       - uses: actions/checkout@v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-release-prepare@master
+      - uses: yboyer/actions/npm-release-prepare@v1.0.0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -148,7 +148,7 @@ jobs:
       - run: npm test --if-present
       - run: npm run build --if-present
       - id: publish
-        uses: yboyer/actions/npm-release-publish@master
+        uses: yboyer/actions/npm-release-publish@v1.0.0
       - name: Create GitHub release
         if: steps.publish.outputs.published == 'true'
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
