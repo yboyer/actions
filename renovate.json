@@ -1,3 +1,14 @@
 {
-  "extends": ["github>yboyer/renovate-config"]
+  "extends": ["github>yboyer/renovate-config"],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "fileMatch": ["^README\\.md$"],
+      "matchStrings": [
+        "uses:\\s*(?<depName>[^\\s@]+)@(?<currentDigest>[a-f0-9]{40})\\s*#\\s*(?<currentValue>v[^\\s]+)"
+      ],
+      "datasourceTemplate": "github-tags",
+      "versioningTemplate": "semver-coerced"
+    }
+  ]
 }
