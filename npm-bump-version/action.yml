@@ -1,0 +1,83 @@
+name: Bump npm version
+description: Increment an npm package version, commit it on the main branch, and push its Git tag.
+
+inputs:
+  release-type:
+    description: "npm version increment: major, minor, patch, premajor, preminor, prepatch, or prerelease."
+    required: false
+    default: patch
+  branch:
+    description: Branch that receives the version-bump commit.
+    required: false
+    default: main
+
+outputs:
+  version:
+    description: New package version.
+    value: ${{ steps.metadata.outputs.version }}
+  tag:
+    description: Git tag created for the new package version.
+    value: ${{ steps.metadata.outputs.tag }}
+
+runs:
+  using: composite
+  steps:
+    - name: Validate release type
+      shell: bash
+      env:
+        RELEASE_TYPE: ${{ inputs.release-type }}
+      run: |
+        case "$RELEASE_TYPE" in
+          major|minor|patch|premajor|preminor|prepatch|prerelease) ;;
+          *) echo "release-type must be a valid npm version increment" >&2; exit 1 ;;
+        esac
+
+    - name: Validate branch
+      shell: bash
+      env:
+        BRANCH: ${{ inputs.branch }}
+      run: |
+        if [[ "${GITHUB_REF_NAME:-}" != "$BRANCH" ]]; then
+          echo "npm-bump-version must run from the $BRANCH branch" >&2
+          exit 1
+        fi
+
+    - name: Set up Node.js
+      uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+
+    - name: Increment version
+      shell: bash
+      env:
+        RELEASE_TYPE: ${{ inputs.release-type }}
+      run: npm version "$RELEASE_TYPE" --no-git-tag-version --ignore-scripts
+
+    - id: metadata
+      name: Get release metadata
+      shell: bash
+      run: |
+        VERSION="$(jq -r '.version' package.json)"
+        echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+        echo "tag=v${VERSION}" >> "$GITHUB_OUTPUT"
+
+    - name: Commit, tag, and push release
+      shell: bash
+      env:
+        VERSION: ${{ steps.metadata.outputs.version }}
+        TAG: ${{ steps.metadata.outputs.tag }}
+        BRANCH: ${{ inputs.branch }}
+      run: |
+        if git ls-remote --exit-code --tags origin "refs/tags/$TAG"; then
+          echo "Tag $TAG already exists" >&2
+          exit 1
+        fi
+
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add package.json
+        if [[ -f package-lock.json ]]; then
+          git add package-lock.json
+        fi
+        git commit -m "chore(release): v${VERSION}"
+        git tag -a "$TAG" -m "Release $TAG"
+        git push origin "HEAD:$BRANCH"
+        git push origin "$TAG"

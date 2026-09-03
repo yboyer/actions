@@ -98,6 +98,41 @@ The `secrets` input uses the same `id=value` format as [`docker/build-push-actio
 
 The [`npm-release-prepare`](npm-release-prepare/action.yml) action increments a package version and creates its release pull request. The [`npm-release-publish`](npm-release-publish/action.yml) action tags and publishes the merged package version. Both expect a checked-out npm project with `package.json` and `package-lock.json`.
 
+### NPM version bump
+
+The [`npm-bump-version`](npm-bump-version/action.yml) action increments a package version, commits the changed manifest on the primary branch, then creates and pushes its `v<version>` tag. It does not create a pull request.
+
+```yaml
+name: Bump version
+
+on:
+  workflow_dispatch:
+    inputs:
+      release_type:
+        description: Version increment
+        required: true
+        default: patch
+        type: choice
+        options: [major, minor, patch, premajor, preminor, prepatch, prerelease]
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7.0.1
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: yboyer/actions/npm-bump-version@v1.0.0
+        with:
+          release-type: ${{ inputs.release_type }}
+          branch: main
+```
+
+The action requires `contents: write`. Use a full checkout and set `branch` to the repository's primary branch if it is not `main`.
+
 Use `prepare` from `workflow_dispatch`, then `publish` when the version-bump pull request updates `package.json` and `package-lock.json` on the default branch.
 
 ```yaml
