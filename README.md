@@ -239,13 +239,9 @@ jobs:
       contents: write
       id-token: write
     env:
-      RELEASE_REF: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref }}
       RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref_name }}
     steps:
       - uses: actions/checkout@v7.0.1
-        with:
-          fetch-depth: 0
-          ref: ${{ env.RELEASE_REF }}
       # Add the project checks required before publication.
       - run: npm ci
       - run: npm test --if-present
