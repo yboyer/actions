@@ -124,7 +124,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -224,7 +224,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: bump
-        uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+        uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         with:
           release-type: ${{ inputs.release_type }}
 
