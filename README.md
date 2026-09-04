@@ -28,8 +28,8 @@ jobs:
   trivy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: yboyer/actions/trivy-scan@v1.0.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: yboyer/actions/trivy-scan@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
 ```
 
 ### Gitleaks — secret scan
@@ -52,10 +52,10 @@ jobs:
   gitleaks:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@v1.0.0
+      - uses: yboyer/actions/gitleaks@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -78,13 +78,13 @@ jobs:
       contents: read
       packages: write
     steps:
-      - uses: actions/checkout@v7.0.1
-      - uses: docker/login-action@v4.6.0
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: docker/login-action@dbcb813823bdd20940b903addbd779551569679f # v4.6.0
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@v1.0.0
+      - uses: yboyer/actions/docker-publish@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -121,10 +121,10 @@ jobs:
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@v1.0.0
+      - uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -157,10 +157,10 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-release-prepare@v1.0.0
+      - uses: yboyer/actions/npm-release-prepare@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -173,7 +173,7 @@ jobs:
       contents: write
       id-token: write
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       # Add the project checks required before publication.
@@ -181,7 +181,7 @@ jobs:
       - run: npm test --if-present
       - run: npm run build --if-present
       - id: publish
-        uses: yboyer/actions/npm-release-publish@v1.0.0
+        uses: yboyer/actions/npm-release-publish@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
       - name: Create GitHub release
         if: steps.publish.outputs.published == 'true'
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
@@ -222,11 +222,11 @@ jobs:
     outputs:
       tag: ${{ steps.bump.outputs.tag }}
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
       - id: bump
-        uses: yboyer/actions/npm-bump-version@v1.0.0
+        uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
         with:
           release-type: ${{ inputs.release_type }}
 
@@ -241,7 +241,7 @@ jobs:
     env:
       RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref_name }}
     steps:
-      - uses: actions/checkout@v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       # Add the project checks required before publication.
       - run: npm ci
       - run: npm test --if-present
