@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/trivy-scan@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
 ```
 
 ### Gitleaks — secret scan
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/gitleaks@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -84,7 +84,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/docker-publish@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -124,7 +124,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -160,7 +160,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-release-prepare@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+      - uses: yboyer/actions/npm-release-prepare@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
@@ -181,7 +181,7 @@ jobs:
       - run: npm test --if-present
       - run: npm run build --if-present
       - id: publish
-        uses: yboyer/actions/npm-release-publish@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+        uses: yboyer/actions/npm-release-publish@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
       - name: Create GitHub release
         if: steps.publish.outputs.published == 'true'
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
@@ -224,7 +224,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: bump
-        uses: yboyer/actions/npm-bump-version@6f38a269351e4e79aab465511b29bb249ee8fad8 # v1.0.0
+        uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
         with:
           release-type: ${{ inputs.release_type }}
 
