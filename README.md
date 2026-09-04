@@ -223,8 +223,6 @@ jobs:
       tag: ${{ steps.bump.outputs.tag }}
     steps:
       - uses: actions/checkout@v7.0.1
-        with:
-          fetch-depth: 0
       - id: bump
         uses: yboyer/actions/npm-bump-version@v1.0.0
         with:
@@ -255,4 +253,4 @@ jobs:
           generate_release_notes: true
 ```
 
-`npm-bump-version` needs `contents: write` and a full checkout history. `publish` depends on `bump` for a manual run, but still runs for a pushed tag because `always()` prevents its skipped dependency from skipping the job. The example uses `npm publish` directly: `npm-bump-version` has already created the tag, whereas `npm-release-publish` only publishes when it creates that tag itself. `id-token: write` enables npm trusted publishing.
+`npm-bump-version` needs `contents: write`; a full checkout history is not required for this direct version-bump workflow. `publish` depends on `bump` for a manual run, but still runs for a pushed tag because `always()` prevents its skipped dependency from skipping the job. The example uses `npm publish` directly: `npm-bump-version` has already created the tag, whereas `npm-release-publish` only publishes when it creates that tag itself. `id-token: write` enables npm trusted publishing.
