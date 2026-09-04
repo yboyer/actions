@@ -8,29 +8,27 @@ on:
         required: true
         default: patch
         type: choice
-        options:
-          - patch
-          - minor
-          - major
-
-permissions:
-  contents: write
+        options: [patch, minor, major]
+  push:
+    tags:
+      - 'v*.*.*'
 
 jobs:
-  release:
-    name: Create release
+  bump:
+    if: github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    outputs:
+      tag: ${{ steps.version.outputs.tag }}
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-
       - name: Configure Git identity
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-
       - name: Compute and push next tag
         id: version
         env:
@@ -67,9 +65,20 @@ jobs:
           git push origin "$next_tag"
           echo "tag=$next_tag" >> "$GITHUB_OUTPUT"
 
-      - name: 🔖 Release
+  publish:
+    needs: bump
+    # Run for pushed tags, or after a successful manual bump.
+    if: ${{ always() && (github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && needs.bump.result == 'success')) }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    env:
+      RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref_name }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Create GitHub release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
-          tag_name: ${{ steps.version.outputs.tag }}
-          name: ${{ steps.version.outputs.tag }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: ${{ env.RELEASE_TAG }}
           generate_release_notes: true
