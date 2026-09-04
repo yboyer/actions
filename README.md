@@ -198,7 +198,7 @@ jobs:
 Use this workflow when version bumps are committed directly to the primary branch instead of through a release pull request. `bump` runs manually; `publish` waits for it, then publishes the new tag. It also runs when a `v*.*.*` tag is pushed directly.
 
 ```yaml
-name: Release from direct bump
+name: Release
 
 on:
   workflow_dispatch:
