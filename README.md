@@ -238,13 +238,19 @@ jobs:
       id-token: write
     env:
       RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref_name }}
+      RELEASE_REF: ${{ github.event_name == 'workflow_dispatch' && needs.bump.outputs.tag || github.ref }}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      # Add the project checks required before publication.
+        with:
+          ref: ${{ env.RELEASE_REF }}
+      # Add the project checks before publication if needed
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020 # v7.0.0
+        with:
+          node-version-file: .node-version
       - run: npm ci
       - run: npm test --if-present
       - run: npm run build --if-present
-      - run: npm publish --provenance
+      - run: npm publish --provenance --access public
       - name: Create GitHub release
         uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
         with:
