@@ -18,14 +18,6 @@ inputs:
     description: Enable GitHub Actions build cache (true or false).
     required: false
     default: "false"
-  tags:
-    description: Docker metadata-action tag definitions. Defaults to semantic-version tags derived from the Git ref.
-    required: false
-    default: |
-      type=semver,pattern={{raw}}
-      type=semver,pattern={{version}}
-      type=semver,pattern={{major}}.{{minor}}
-      type=semver,pattern={{major}}
 
 runs:
   using: composite
@@ -34,10 +26,15 @@ runs:
       uses: docker/metadata-action@dc802804100637a589fabce1cb79ff13a1411302 # v6.2.0
       id: meta
       with:
+        context: git
         images: ${{ inputs.image }}
         flavor: |
           latest=auto
-        tags: ${{ inputs.tags }}
+        tags: |
+          type=semver,pattern={{raw}}
+          type=semver,pattern={{version}}
+          type=semver,pattern={{major}}.{{minor}}
+          type=semver,pattern={{major}}
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4.3.0
