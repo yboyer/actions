@@ -23,12 +23,13 @@ runs:
       id: meta
       with:
         images: ${{ inputs.image }}
+        flavor: |
+          latest=auto
         tags: |
           type=semver,pattern={{raw}}
           type=semver,pattern={{version}}
           type=semver,pattern={{major}}.{{minor}}
           type=semver,pattern={{major}}
-          type=raw,value=latest
 
     - name: Set up QEMU
       uses: docker/setup-qemu-action@1f40c72289eff860ee54a304f1438e3cff362e0a # v4.3.0
