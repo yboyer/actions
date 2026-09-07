@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
+      - uses: yboyer/actions/trivy-scan@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
 ```
 
 ### Gitleaks — secret scan
@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
+      - uses: yboyer/actions/gitleaks@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -84,7 +84,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
+      - uses: yboyer/actions/docker-publish@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -120,7 +120,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
+      - uses: yboyer/actions/npm-bump-version@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -158,7 +158,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: bump
-        uses: yboyer/actions/npm-bump-version@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
+        uses: yboyer/actions/npm-bump-version@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
         with:
           release-type: ${{ inputs.release_type }}
 
