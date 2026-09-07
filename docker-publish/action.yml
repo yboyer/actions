@@ -14,6 +14,10 @@ inputs:
   build-args:
     description: Docker build arguments, one key=value entry per line.
     required: false
+  cache:
+    description: Enable GitHub Actions build cache (true or false).
+    required: false
+    default: "false"
 
 runs:
   using: composite
@@ -45,3 +49,5 @@ runs:
         tags: ${{ steps.meta.outputs.tags }}
         secrets: ${{ inputs.secrets }}
         build-args: ${{ inputs.build-args }}
+        cache-from: ${{ inputs.cache == 'true' && 'type=gha' || '' }}
+        cache-to: ${{ inputs.cache == 'true' && 'type=gha,mode=max' || '' }}
