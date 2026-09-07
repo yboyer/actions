@@ -94,6 +94,17 @@ jobs:
 
 The `secrets` input uses the same `id=value` format as [`docker/build-push-action`](https://github.com/docker/build-push-action). The Dockerfile can consume the above secret with `RUN --mount=type=secret,id=token ...`.
 
+By default, `tags` derives semantic-version tags from the triggering Git tag. For a manually orchestrated release, provide a [`docker/metadata-action` tag definition](https://github.com/docker/metadata-action#tags-input), for example:
+
+```yaml
+      - uses: yboyer/actions/docker-publish@<commit>
+        with:
+          image: ghcr.io/yboyer/example/api
+          dockerfile: ./.docker/Dockerfile.api
+          tags: |
+            type=raw,value=${{ env.RELEASE_TAG }}
+```
+
 ### NPM version bump
 
 The [`npm-bump-version`](npm-bump-version/action.yml) action increments a package version, commits the changed manifest on the primary branch, then creates and pushes its `v<version>` tag. It does not create a pull request.
