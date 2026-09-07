@@ -94,10 +94,6 @@ jobs:
 
 The `secrets` input uses the same `id=value` format as [`docker/build-push-action`](https://github.com/docker/build-push-action). The Dockerfile can consume the above secret with `RUN --mount=type=secret,id=token ...`.
 
-### NPM release
-
-The [`npm-release-prepare`](npm-release-prepare/action.yml) action increments a package version and creates its release pull request. The [`npm-release-publish`](npm-release-publish/action.yml) action tags and publishes the merged package version. Both expect a checked-out npm project with `package.json` and `package-lock.json`.
-
 ### NPM version bump
 
 The [`npm-bump-version`](npm-bump-version/action.yml) action increments a package version, commits the changed manifest on the primary branch, then creates and pushes its `v<version>` tag. It does not create a pull request.
@@ -130,68 +126,6 @@ jobs:
 ```
 
 The action requires `contents: write`. Check out the repository's primary branch with full history before invoking it.
-
-Use `prepare` from `workflow_dispatch`, then `publish` when the version-bump pull request updates `package.json` and `package-lock.json` on the default branch.
-
-```yaml
-name: Release
-
-on:
-  workflow_dispatch:
-    inputs:
-      release_type:
-        description: Version increment
-        required: true
-        default: patch
-        type: choice
-        options: [major, minor, patch, premajor, preminor, prepatch, prerelease]
-  push:
-    branches: [master, main]
-    paths: [package.json, package-lock.json]
-
-jobs:
-  prepare:
-    if: github.event_name == 'workflow_dispatch'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      pull-requests: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - uses: yboyer/actions/npm-release-prepare@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          release-type: ${{ inputs.release_type }}
-
-  publish:
-    if: github.event_name == 'push'
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-      id-token: write
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      # Add the project checks required before publication.
-      - run: npm ci
-      - run: npm test --if-present
-      - run: npm run build --if-present
-      - id: publish
-        uses: yboyer/actions/npm-release-publish@77fa8173e9a31d1be7cd7d613c95499ff52a33e3 # v1.1.0
-      - name: Create GitHub release
-        if: steps.publish.outputs.published == 'true'
-        uses: softprops/action-gh-release@efb35369e0ad2afab669f228072c1b0d510eae64 # v3.0.3
-        with:
-          tag_name: ${{ steps.publish.outputs.tag }}
-          name: ${{ steps.publish.outputs.tag }}
-          generate_release_notes: true
-```
-
-`npm-release-prepare` needs `contents: write` and `pull-requests: write`, plus a full checkout history to list commits since the last tag. It outputs `version`, `branch`, and `pull-request-url`; pass the required `GH_TOKEN` to its step. `npm-release-publish` needs `contents: write` for the tag and release plus `id-token: write` for npm trusted publishing. Install dependencies and run the project checks before invoking it. The actions use the workflow `GITHUB_TOKEN`; allow GitHub Actions to create pull requests in the repository settings when required.
 
 ### NPM release — direct version bump
 
