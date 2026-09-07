@@ -94,6 +94,8 @@ jobs:
 
 The `secrets` input uses the same `id=value` format as [`docker/build-push-action`](https://github.com/docker/build-push-action). The Dockerfile can consume the above secret with `RUN --mount=type=secret,id=token ...`.
 
+Docker tags are derived from the checked-out Git ref. Check out the release tag before invoking this action, including for manually orchestrated releases.
+
 ### NPM version bump
 
 The [`npm-bump-version`](npm-bump-version/action.yml) action increments a package version, commits the changed manifest on the primary branch, then creates and pushes its `v<version>` tag. It does not create a pull request.
