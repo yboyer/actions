@@ -32,34 +32,6 @@ jobs:
       - uses: yboyer/actions/trivy-scan@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
 ```
 
-### Gitleaks — secret scan
-
-The [`gitleaks`](gitleaks/action.yml) composite action uses [Gitleaks](https://github.com/gitleaks/gitleaks) to scan the repository history for leaked secrets. Check out the complete history before running it.
-
-#### Usage
-
-```yaml
-name: Secrets Scan
-
-on:
-  workflow_dispatch:
-  push:
-    branches: [master, main]
-  pull_request:
-    branches: [master, main]
-
-jobs:
-  gitleaks:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-```
-
 ### Docker publish
 
 The [`docker-publish`](docker-publish/action.yml) composite action builds, tags, and publishes an image to GHCR. It creates semver tags and `latest`.
