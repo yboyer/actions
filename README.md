@@ -55,7 +55,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/gitleaks@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
+      - uses: yboyer/actions/gitleaks@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
