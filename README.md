@@ -84,7 +84,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@bdee153c4c32daddb38e4849726db49152fb34bd # v1.2.0
+      - uses: yboyer/actions/docker-publish@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
