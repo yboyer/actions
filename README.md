@@ -27,10 +27,32 @@ on:
 jobs:
   trivy:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - uses: yboyer/actions/trivy-scan@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
 ```
+
+### Report failed vulnerability check
+
+The [`report-failure`](report-failure/action.yml) composite action creates one open incident issue for a failed scheduled vulnerability check, then updates it on later failures. Add it as a step in the vulnerability-check job after the scan:
+
+```yaml
+jobs:
+  trivy:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: yboyer/actions/trivy-scan@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
+      - name: Report failed vulnerability check
+        if: ${{ failure() && github.event_name == 'schedule' }}
+        uses: yboyer/actions/report-failure@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
+```
+
+The caller job needs `issues: write`; repository workflow permissions must also allow the `GITHUB_TOKEN` to create and edit issues.
 
 ### Docker publish
 

@@ -1,0 +1,43 @@
+name: Report failed vulnerability check
+description: Create or update an incident issue after a production vulnerability-check failure.
+
+runs:
+  using: composite
+  steps:
+    - name: Create or update incident issue
+      shell: bash
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        set -euo pipefail
+
+        marker="<!-- production-vulnerability-check -->"
+        title="Production vulnerability check failed"
+        run_url="https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+        body="$(cat <<EOF
+        ${marker}
+        The scheduled production vulnerability check failed.
+
+        - [View failed workflow run](${run_url})
+
+        This issue is updated on subsequent failures.
+        EOF
+        )"
+
+        existing_issue="$(
+          gh issue list --repo "${{ github.repository }}" --state open \
+            --limit 100 --json number,body \
+            --jq '.[] | select(.body | contains("<!-- production-vulnerability-check -->")) | .number' \
+            | head -n 1
+        )"
+
+        if [[ -n "${existing_issue}" ]]; then
+          gh issue edit "${existing_issue}" \
+            --repo "${{ github.repository }}" \
+            --body "${body}"
+        else
+          gh issue create \
+            --repo "${{ github.repository }}" \
+            --title "${title}" \
+            --body "${body}"
+        fi
