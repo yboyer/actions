@@ -31,7 +31,7 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
+      - uses: yboyer/actions/trivy-scan@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
 ```
 
 ### Report failed vulnerability check
@@ -46,7 +46,7 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
+      - uses: yboyer/actions/trivy-scan@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
       - name: Report failed vulnerability check
         if: ${{ failure() && github.event_name == 'schedule' }}
         uses: yboyer/actions/report-failure@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
