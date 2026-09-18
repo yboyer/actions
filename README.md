@@ -49,7 +49,7 @@ jobs:
       - uses: yboyer/actions/trivy-scan@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
       - name: Report failed vulnerability check
         if: ${{ failure() && github.event_name == 'schedule' }}
-        uses: yboyer/actions/report-failure@db457ced48bf1a7cbc7987319d3028e2c7271d33 # v1.2.1
+        uses: yboyer/actions/report-failure@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
 ```
 
 The caller job needs `issues: write`; repository workflow permissions must also allow the `GITHUB_TOKEN` to create and edit issues.
