@@ -40,7 +40,7 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+      - uses: yboyer/actions/trivy-scan@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
 ```
 
 ### Report failed vulnerability check
@@ -55,10 +55,10 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+      - uses: yboyer/actions/trivy-scan@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
       - name: Report failed vulnerability check
         if: ${{ failure() && github.event_name == 'schedule' }}
-        uses: yboyer/actions/report-failure@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+        uses: yboyer/actions/report-failure@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
 ```
 
 The caller job needs `issues: write`; repository workflow permissions must also allow the `GITHUB_TOKEN` to create and edit issues.
@@ -87,7 +87,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+      - uses: yboyer/actions/docker-publish@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -125,7 +125,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+      - uses: yboyer/actions/npm-bump-version@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -213,7 +213,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: bump
-        uses: yboyer/actions/npm-bump-version@02bfc0278819bd2b80e9c957ee891bf037565858 # v1.3.0
+        uses: yboyer/actions/npm-bump-version@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
         with:
           release-type: ${{ inputs.release_type }}
 
