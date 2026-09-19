@@ -2,6 +2,15 @@
 
 Repository of reusable GitHub Actions.
 
+## Table of contents
+
+- [Trivy — security scan](#trivy--security-scan)
+- [Report failed vulnerability check](#report-failed-vulnerability-check)
+- [Docker publish](#docker-publish)
+- [NPM version bump](#npm-version-bump)
+- [Clean npm overrides](#clean-npm-overrides)
+- [NPM release — direct version bump](#npm-release--direct-version-bump)
+
 ## Available templates
 
 ### Trivy — security scan
