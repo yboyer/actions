@@ -1,0 +1,19 @@
+name: Clean npm overrides
+description: Remove npm overrides that are no longer required to prevent high-severity production vulnerabilities.
+
+outputs:
+  changed:
+    description: Whether one or more npm overrides were removed.
+    value: ${{ steps.overrides.outputs.changed }}
+  removed-overrides:
+    description: Comma-separated names of removed npm overrides.
+    value: ${{ steps.overrides.outputs.removed-overrides }}
+
+runs:
+  using: composite
+  steps:
+    - id: overrides
+      name: Find removable overrides
+      shell: bash
+      run: node "$GITHUB_ACTION_PATH/remove-unnecessary-overrides.mjs"
+
