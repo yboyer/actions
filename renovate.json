@@ -7,7 +7,8 @@
         "/^README\\.md$/"
       ],
       "matchStrings": [
-        "uses:\\s*(?<depName>[^\\s@]+)@(?<currentDigest>[a-f0-9]{40})\\s*#\\s*(?<currentValue>v[^\\s]+)"
+        "uses:\\s*(?<depName>[^\\s@]+)@(?<currentDigest>[a-f0-9]{40})\\s*#\\s*(?<currentValue>v[^\\s]+)",
+        "uses:\\s*(?<depName>[^\\s@]+)@(?<currentValue>v[^\\s#]+)"
       ],
       "datasourceTemplate": "github-tags",
       "versioningTemplate": "semver-coerced"
