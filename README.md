@@ -41,7 +41,7 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+      - uses: yboyer/actions/trivy-scan@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
 ```
 
 ### Report failed vulnerability check
@@ -56,10 +56,10 @@ jobs:
       issues: write
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: yboyer/actions/trivy-scan@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+      - uses: yboyer/actions/trivy-scan@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
       - name: Report failed vulnerability check
         if: ${{ failure() && github.event_name == 'schedule' }}
-        uses: yboyer/actions/report-failure@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+        uses: yboyer/actions/report-failure@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
 ```
 
 The caller job needs `issues: write`; repository workflow permissions must also allow the `GITHUB_TOKEN` to create and edit issues.
@@ -88,7 +88,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-      - uses: yboyer/actions/docker-publish@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+      - uses: yboyer/actions/docker-publish@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
         with:
           image: ghcr.io/yboyer/example/api
           dockerfile: ./.docker/Dockerfile.api
@@ -131,7 +131,7 @@ jobs:
         with:
           node-version-file: .node-version
       - id: release
-        uses: yboyer/actions/semantic-release@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+        uses: yboyer/actions/semantic-release@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
@@ -164,7 +164,7 @@ jobs:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 0
-      - uses: yboyer/actions/npm-bump-version@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+      - uses: yboyer/actions/npm-bump-version@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
         with:
           release-type: ${{ inputs.release_type }}
 ```
@@ -203,7 +203,7 @@ jobs:
           node-version-file: .node-version
           cache: npm
       - id: overrides
-        uses: yboyer/actions/clean-npm-overrides@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+        uses: yboyer/actions/clean-npm-overrides@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
       - name: Create pull request
         if: steps.overrides.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
@@ -252,7 +252,7 @@ jobs:
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
       - id: bump
-        uses: yboyer/actions/npm-bump-version@5c400ee78c4b0775652ddecebe811c238233affe # v1.4.0
+        uses: yboyer/actions/npm-bump-version@fe8fa33acc98bb6728fe9d5bb37663071cfa1463 # v1.5.0
         with:
           release-type: ${{ inputs.release_type }}
 
