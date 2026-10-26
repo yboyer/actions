@@ -1,5 +1,5 @@
 {
-  "extends": ["github>yboyer/renovate-config"],
+  "extends": ["github>yboyer/renovate-config", "github>yboyer/renovate-config:platformAutomerge"],
   "customManagers": [
     {
       "customType": "regex",
