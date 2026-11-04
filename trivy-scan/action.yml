@@ -4,6 +4,41 @@ description: Scan the repository filesystem for HIGH and CRITICAL security vulne
 runs:
   using: composite
   steps:
+    - name: Install Trivy from GitHub Releases
+      shell: bash
+      env:
+        TRIVY_VERSION: '0.76.1'
+      run: |
+        case "$RUNNER_OS/$RUNNER_ARCH" in
+          Linux/X64) platform=Linux-64bit ;;
+          Linux/ARM64) platform=Linux-ARM64 ;;
+          macOS/X64) platform=macOS-64bit ;;
+          macOS/ARM64) platform=macOS-ARM64 ;;
+          Windows/X64) platform=windows-64bit ;;
+          *) echo "Unsupported runner: $RUNNER_OS/$RUNNER_ARCH" >&2; exit 1 ;;
+        esac
+        extension=tar.gz
+        if [ "$RUNNER_OS" = Windows ]; then extension=zip; fi
+        download_dir=$(mktemp -d "$RUNNER_TEMP/trivy-download.XXXXXX")
+        cd "$download_dir"
+        archive="trivy_${TRIVY_VERSION}_${platform}.${extension}"
+        checksums="trivy_${TRIVY_VERSION}_checksums.txt"
+        release="https://github.com/aquasecurity/trivy/releases/download/v${TRIVY_VERSION}"
+        curl --fail --location --retry 3 --output "$archive" "$release/$archive"
+        curl --fail --location --retry 3 --output "$checksums" "$release/$checksums"
+        grep "  ${archive}$" "$checksums" > archive.sha256
+        if command -v sha256sum >/dev/null 2>&1; then
+          sha256sum --check --strict archive.sha256
+        else
+          shasum -a 256 --check archive.sha256
+        fi
+        mkdir bin
+        if [ "$extension" = zip ]; then
+          unzip "$archive" trivy.exe -d bin
+        else
+          tar -xzf "$archive" -C bin trivy
+        fi
+        echo "$download_dir/bin" >> "$GITHUB_PATH"
     - name: Trivy scan
       uses: aquasecurity/trivy-action@ed142fd0673e97e23eac54620cfb913e5ce36c25 # v0.36.0
       with:
@@ -14,4 +49,4 @@ runs:
         ignore-unfixed: true
         format: table
         exit-code: 1
-        version: latest
+        skip-setup-trivy: true
