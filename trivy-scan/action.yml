@@ -4,7 +4,6 @@ description: Scan the repository filesystem for HIGH and CRITICAL security vulne
 runs:
   using: composite
   steps:
-    # setup-trivy downloads from get.trivy.dev, which fails DNS resolution.
     - name: Install Trivy from GitHub Releases
       shell: bash
       env:

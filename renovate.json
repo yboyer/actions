@@ -12,6 +12,19 @@
       ],
       "datasourceTemplate": "github-tags",
       "versioningTemplate": "semver-coerced"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^trivy-scan/action\\.yml$/"
+      ],
+      "matchStrings": [
+        "TRIVY_VERSION:\\s*'(?<currentValue>[^']+)'"
+      ],
+      "depNameTemplate": "aquasecurity/trivy",
+      "datasourceTemplate": "github-releases",
+      "extractVersionTemplate": "^v(?<version>.+)$",
+      "versioningTemplate": "semver"
     }
   ]
 }
