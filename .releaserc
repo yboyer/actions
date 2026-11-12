@@ -29,7 +29,7 @@
       "@semantic-release/github",
       {
         "failCommentCondition": false,
-        "successComment": false,
+        "successCommentCondition": false,
         "releasedLabels": false
       }
     ]
