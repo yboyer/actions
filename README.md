@@ -206,7 +206,7 @@ jobs:
         uses: yboyer/actions/clean-npm-overrides@09809ba4aef750373e8e258c96d5150d713bcc34 # v1.6.0
       - name: Create pull request
         if: steps.overrides.outputs.changed == 'true'
-        uses: peter-evans/create-pull-request@15733dbdfeedb4f7fdb73d13c6f5ac83b710fab8 # v8.1.2
+        uses: peter-evans/create-pull-request@3ffccacd46053766916f087ce41d627c0b8cf2d1 # v8.1.3
         with:
           branch: chore/remove-npm-overrides
           delete-branch: true
