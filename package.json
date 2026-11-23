@@ -3,7 +3,6 @@
   "private": true,
   "devDependencies": {
     "@yboyer/semantic-release-config": "1.0.0",
-    "conventional-changelog-conventionalcommits": "9.1.0",
-    "semantic-release": "26.0.1"
+    "conventional-changelog-conventionalcommits": "9.1.0"
   }
 }
