@@ -104,7 +104,7 @@ Docker tags are derived from the checked-out Git ref. Check out the release tag 
 
 The [`semantic-release`](semantic-release/action.yml) composite action runs `semantic-release@26.0.1` with `@yboyer/semantic-release-config@1.0.0`, using the caller repository's release configuration. Its `tag` output is empty when no release is needed.
 
-The caller must check out the release branch with full history and tags, set up Node.js, and provide `GITHUB_TOKEN`. Keep project dependency installation, builds, and deployment steps in the caller workflow.
+The caller must check out the release branch with full history and tags, set up Node.js, and provide `GITHUB_TOKEN`. Keep project dependency installation, builds, and deployment steps in the caller workflow. Use `extra-package` to install one additional npm package in the same step as the release tools.
 
 ```yaml
 name: Release
