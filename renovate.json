@@ -25,6 +25,26 @@
       "datasourceTemplate": "github-releases",
       "extractVersionTemplate": "^v(?<version>.+)$",
       "versioningTemplate": "semver"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^\\.github/workflows/release\\.yml$/"
+      ],
+      "matchStrings": [
+        "[ \\t](?<depName>conventional-changelog-conventionalcommits)@(?<currentValue>[^\\s\"\\x27]+)"
+      ],
+      "datasourceTemplate": "npm"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^semantic-release/action\\.yml$/"
+      ],
+      "matchStrings": [
+        "[ \\t](?<depName>semantic-release|@yboyer/semantic-release-config)@(?<currentValue>[^\\s\"\\x27]+)"
+      ],
+      "datasourceTemplate": "npm"
     }
   ]
 }
