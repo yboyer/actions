@@ -21,6 +21,7 @@ jobs:
       - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
         with:
           node-version: '26.13.1'
-      - run: npx --yes --package=semantic-release@26.0.1 --package=conventional-changelog-conventionalcommits@9.1.0 semantic-release
+      - run: npm ci
+      - run: npx --no-install semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
