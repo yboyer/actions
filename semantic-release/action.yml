@@ -1,6 +1,11 @@
 name: Semantic release
 description: Run semantic-release using the repository configuration and expose the created tag.
 
+inputs:
+  extra-package:
+    description: Additional npm package to install with the release tools.
+    required: false
+
 outputs:
   tag:
     description: Git tag created by semantic-release, or an empty string when no release is needed.
@@ -9,6 +14,11 @@ outputs:
 runs:
   using: composite
   steps:
+    - name: Install release tools
+      shell: bash
+      env:
+        EXTRA_PACKAGE: ${{ inputs.extra-package }}
+      run: npm install --no-save --min-release-age=0 semantic-release@26.0.1 @yboyer/semantic-release-config@1.0.0 ${EXTRA_PACKAGE:+"$EXTRA_PACKAGE"}
     - id: release
       name: Run semantic-release
       shell: bash
@@ -17,7 +27,7 @@ runs:
         tags_before=$(mktemp)
         trap 'rm -f "$tags_before"' EXIT
         git tag --list | sort > "$tags_before"
-        npx --yes --package=semantic-release@25.0.1 --package=@semantic-release/git@11.0.1 semantic-release
+        npx --no-install semantic-release
         tag=$(comm -13 "$tags_before" <(git tag --list | sort))
         if [[ "$tag" == *$'\n'* ]]; then
           echo "Expected at most one new release tag." >&2
