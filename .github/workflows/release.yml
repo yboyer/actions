@@ -25,6 +25,6 @@ jobs:
           node-version-file: '.node-version'
       - uses: ./semantic-release
         with:
-          extra-package: conventional-changelog-conventionalcommits@9.1.0
+          extra-package: conventional-changelog-conventionalcommits@10.4.1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
